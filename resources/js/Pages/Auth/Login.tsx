@@ -30,6 +30,7 @@ export default function Login({
 
     return (
         <GuestLayout>
+
             <Head title="Log in" />
 
             {status && (
@@ -50,6 +51,7 @@ export default function Login({
                         className="mt-1 block w-full"
                         autoComplete="username"
                         isFocused={true}
+                        min={1}
                         onChange={(e) => setData('employee_id', e.target.value)}
                     />
 
@@ -72,36 +74,20 @@ export default function Login({
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData('remember', e.target.checked)
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
-                    </label>
-                </div>
+
 
                 <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
+                        ログイン
                     </PrimaryButton>
+                    <Link href="/" className="ml-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 ${
+                    disabled && 'opacity-25">
+                        ホーム画面へ
+                    </Link>
                 </div>
             </form>
         </GuestLayout>
+
     );
 }
+

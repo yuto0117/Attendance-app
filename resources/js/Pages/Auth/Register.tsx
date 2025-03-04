@@ -44,6 +44,7 @@ export default function Register() {
                         value={data.employee_id}
                         className="mt-1 block w-full"
                         autoComplete="username"
+                        min={1}
                         onChange={(e) => setData('employee_id', e.target.value)}
                         required
                     />
@@ -157,11 +158,15 @@ export default function Register() {
                         href={route('login')}
                         className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                        Already registered?
+                        すでに登録済みですか？
                     </Link>
                     <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
+                        登録
                     </PrimaryButton>
+                    <Link href="/" className="ml-4 inline-flex items-center rounded-md border border-transparent bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition duration-150 ease-in-out hover:bg-gray-700 focus:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:bg-gray-900 ${
+                    disabled && 'opacity-25">
+                        ホーム画面へ
+                    </Link>
                 </div>
             </form>
 

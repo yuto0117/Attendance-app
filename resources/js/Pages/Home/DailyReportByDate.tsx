@@ -96,7 +96,7 @@ const DailyReportByDate: React.FC<{ attendanceMembers: Member[], employees: User
     return (
         <div className="mt-6 text-center min-h-screen">
             <h1 className="text-lg mb-4">
-                <span className="text-red-600 pr-4">支援記録紹介(日付別)</span>
+                <span className="text-red-600 pr-4">支援記録照会(日付別)</span>
             </h1>
             <div className="flex items-center justify-center mb-8 space-x-4">
                 <p>営業日指定 :</p>

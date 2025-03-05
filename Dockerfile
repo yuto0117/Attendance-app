@@ -34,6 +34,7 @@ COPY package*.json ./
 RUN npm install
 RUN npm list @types/node
 # 7. Reactアプリをビルド
+RUN npm install typescript@latest --save-dev
 RUN npm run build
 
 # 8. Reactのビルド結果を Laravel で表示するための設定

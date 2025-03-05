@@ -30,7 +30,7 @@ WORKDIR /var/www/resources/js
 RUN rm -rf node_modules
 
 COPY package*.json ./
-
+RUN npm install typescript@latest --save-dev
 RUN npm install --save-dev @types/node
 RUN npm install
 

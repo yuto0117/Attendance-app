@@ -30,10 +30,9 @@ WORKDIR /var/www/resources/js
 
 
 COPY package*.json ./
-RUN npm install typescript@latest --save-dev
-RUN npm install --save-dev @types/node
+
 RUN npm install
-RUN node -v
+
 # 7. Reactアプリをビルド
 RUN npm run build
 

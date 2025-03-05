@@ -31,8 +31,8 @@ RUN npm install
 # 7. Reactアプリをビルド
 RUN npm run build
 
-# 8. Reactのビルド結果をLaravelのpublicディレクトリにコピー
-COPY frontend/build /var/www/public
+# 8. Reactのビルド結果を Laravel で表示するための設定
+# (Inertia.jsで直接フロントエンドがレンダリングされるため、特に `public` にコピーはしない)
 
 # 9. Laravelの開発サーバーを起動
 CMD php artisan serve --host=0.0.0.0 --port=8080

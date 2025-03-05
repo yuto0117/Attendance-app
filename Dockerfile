@@ -1,5 +1,5 @@
 # 1. PHPのインストールとLaravel環境を準備
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # 2. 必要な依存関係をインストール
 RUN apt-get update && apt-get install -y \

@@ -32,7 +32,7 @@ WORKDIR /var/www/resources/js
 COPY package*.json ./
 
 RUN npm install
-
+RUN ls -l node_modules
 # 7. Reactアプリをビルド
 RUN npm run build
 

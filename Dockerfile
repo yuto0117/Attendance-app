@@ -20,7 +20,7 @@ COPY . /var/www
 RUN composer install --no-dev --optimize-autoloader
 
 # 5. Node.jsとNPMのインストール
-RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get -y install nodejs
 
 # 6. React（Inertia.jsを使用）の依存関係をインストール
@@ -32,9 +32,8 @@ WORKDIR /var/www/resources/js
 COPY package*.json ./
 
 RUN npm install
-RUN npm list @types/node
+
 # 7. Reactアプリをビルド
-RUN npm install typescript@latest --save-dev
 RUN npm run build
 
 # 8. Reactのビルド結果を Laravel で表示するための設定

@@ -27,6 +27,7 @@ RUN apt-get -y install nodejs
 WORKDIR /var/www/resources/js
 COPY package*.json ./
 RUN npm install
+RUN npm install --save-dev @types/node
 
 # 7. Reactアプリをビルド
 RUN npm run build

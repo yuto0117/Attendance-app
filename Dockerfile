@@ -25,9 +25,14 @@ RUN apt-get -y install nodejs
 
 # 6. React（Inertia.jsを使用）の依存関係をインストール
 WORKDIR /var/www/resources/js
+
+# node_modulesを削除して再インストール
+RUN rm -rf node_modules
+
 COPY package*.json ./
-RUN npm install
+
 RUN npm install --save-dev @types/node
+RUN npm install
 
 # 7. Reactアプリをビルド
 RUN npm run build

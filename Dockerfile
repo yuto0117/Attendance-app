@@ -20,14 +20,14 @@ COPY . /var/www
 RUN composer install --no-dev --optimize-autoloader
 
 # 5. Node.jsとNPMのインストール
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash -
 RUN apt-get -y install nodejs
 
 # 6. React（Inertia.jsを使用）の依存関係をインストール
 WORKDIR /var/www/resources/js
 COPY package*.json ./
 RUN npm install
-RUN npm install --save-dev @types/node
+
 # 7. Reactアプリをビルド
 RUN npm run build
 

@@ -24,8 +24,8 @@ RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get -y install nodejs
 
 # 6. React（Inertia.jsを使用）の依存関係をインストール
-WORKDIR /var/www/frontend
-COPY frontend/package*.json ./
+WORKDIR /var/www/resources/js
+COPY package*.json ./
 RUN npm install
 
 # 7. Reactアプリをビルド

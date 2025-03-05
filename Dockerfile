@@ -27,13 +27,13 @@ RUN apt-get -y install nodejs
 WORKDIR /var/www/resources/js
 
 # node_modulesを削除して再インストール
-RUN rm -rf node_modules
+
 
 COPY package*.json ./
 RUN npm install typescript@latest --save-dev
 RUN npm install --save-dev @types/node
 RUN npm install
-
+RUN node -v
 # 7. Reactアプリをビルド
 RUN npm run build
 

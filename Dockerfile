@@ -23,10 +23,6 @@ RUN composer install --no-dev --optimize-autoloader
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get -y install nodejs
 
-# 6. React（Inertia.jsを使用）の依存関係をインストール
-WORKDIR /var/www/resources/js
-
-# node_modulesを削除して再インストール
 
 
 COPY package*.json ./

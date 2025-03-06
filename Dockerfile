@@ -19,6 +19,7 @@ WORKDIR /var/www
 COPY . /var/www
 RUN composer install --no-dev --optimize-autoloader
 
+RUN php artisan config:cache && php artisan route:cache
 # 5. Node.jsとNPMのインストール
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get -y install nodejs

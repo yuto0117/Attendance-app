@@ -28,7 +28,8 @@ RUN apt-get -y install nodejs
 COPY package*.json ./
 
 RUN npm install
-RUN ls -l node_modules
+RUN ls -la /var/www
+
 # 7. Reactアプリをビルド
 RUN npm run build
 

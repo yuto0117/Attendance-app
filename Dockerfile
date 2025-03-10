@@ -38,6 +38,9 @@ RUN php artisan migrate --force
 # (Inertia.jsで直接フロントエンドがレンダリングされるため、特に `public` にコピーはしない)
 RUN chmod 775 -R ./storage ./bootstrap/cache
 # 9. Laravelの開発サーバーを起動
+
+RUN ls -l /var/www
+
 CMD php artisan serve --host=0.0.0.0 --port=8080
 
 # 10. ポートを開放

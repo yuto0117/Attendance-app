@@ -29,14 +29,14 @@ RUN apt-get -y install nodejs
 COPY package*.json ./
 
 RUN npm install
-RUN ls -la /var/www
 
 # 7. Reactアプリをビルド
 RUN npm run build
 
+RUN php artisan migrate --force
 # 8. Reactのビルド結果を Laravel で表示するための設定
 # (Inertia.jsで直接フロントエンドがレンダリングされるため、特に `public` にコピーはしない)
-
+RUN chmod 775 -R ./storage ./bootstrap/cache
 # 9. Laravelの開発サーバーを起動
 CMD php artisan serve --host=0.0.0.0 --port=8080
 

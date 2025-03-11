@@ -1,7 +1,8 @@
 # 1. PHPのインストールとLaravel環境を準備
-FROM php:8.2-fpm
+# 1. Apache + PHP 8.2
+FROM php:8.2-apache
 
-# 2. 必要な依存関係をインストール
+# 2. 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y \
     curl \
     zip \
@@ -15,33 +16,33 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # 4. Laravelの依存関係をインストール
-WORKDIR /var/www
-COPY . /var/www
+WORKDIR /var/www/html
+COPY . /var/www/html
 RUN composer install --no-dev --optimize-autoloader
 
+RUN php artisan key:generate
 RUN php artisan config:cache && php artisan route:cache
+
 # 5. Node.jsとNPMのインストール
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get -y install nodejs
 
-
-
 COPY package*.json ./
-
 RUN npm install
-
-# 7. Reactアプリをビルド
 RUN npm run build
 
+# 6. 権限設定
+RUN chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+# 7. Laravelのマイグレーション
 RUN php artisan migrate --force
-# 8. Reactのビルド結果を Laravel で表示するための設定
-# (Inertia.jsで直接フロントエンドがレンダリングされるため、特に `public` にコピーはしない)
-RUN chmod 775 -R ./storage ./bootstrap/cache
-# 9. Laravelの開発サーバーを起動
 
-RUN ls -l /var/www
+# 8. Apache の設定
+RUN a2enmod rewrite
 
-CMD php artisan serve --host=0.0.0.0 --port=8080
+# 9. ポートを開放
+EXPOSE 80
 
-# 10. ポートを開放
-EXPOSE 8080
+# 10. Apache を起動
+CMD ["apache2-foreground"]

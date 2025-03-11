@@ -20,6 +20,8 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 COPY ./apache/default.conf /etc/apache2/sites-enabled/000-default.conf
 
+RUN chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache
 
 RUN composer install --no-dev --optimize-autoloader
 
@@ -35,8 +37,7 @@ RUN npm install
 RUN npm run build
 
 # 6. 権限設定
-RUN chmod -R 775 storage bootstrap/cache
-RUN chown -R www-data:www-data storage bootstrap/cache
+
 
 # 7. Laravelのマイグレーション
 RUN php artisan migrate --force

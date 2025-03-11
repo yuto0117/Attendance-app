@@ -39,6 +39,7 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 
 # 7. Laravelのマイグレーション
 RUN php artisan migrate --force
+RUN ls -la /var/www/html
 
 # 8. Apache の設定
 RUN a2enmod rewrite

@@ -21,8 +21,9 @@ COPY . /var/www/html
 COPY ./apache/default.conf /etc/apache2/sites-enabled/000-default.conf
 
 
-
-RUN sudo composer install
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+USER www-data
+RUN composer install --no-dev --optimize-autoloader
 
 
 RUN php artisan config:cache && php artisan route:cache

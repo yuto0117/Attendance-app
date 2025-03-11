@@ -34,7 +34,8 @@ RUN npm install
 RUN npm run build
 
 # 6. 権限設定
-RUN chmod 777 -R ./
+RUN chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache
 
 # 7. Laravelのマイグレーション
 RUN php artisan migrate --force

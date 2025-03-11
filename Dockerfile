@@ -20,10 +20,10 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 COPY ./apache/default.conf /etc/apache2/sites-enabled/000-default.conf
 
-RUN php artisan config:cache && php artisan route:cache
+
 RUN composer install --no-dev --optimize-autoloader
 
-
+RUN php artisan config:cache && php artisan route:cache
 
 
 # 5. Node.jsとNPMのインストール

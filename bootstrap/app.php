@@ -20,5 +20,5 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // dd(dirname(__DIR__),$exceptions);
-        dd(DB::connection()->getPdo(),$exceptions);
+        dd(DB::connection()->getPdo(),$exceptions,env('DB_HOST'), env('DB_DATABASE'), env('DB_USERNAME'), env('DB_PASSWORD'));
     })->create();

@@ -16,9 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
-
-        //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        dd($exceptions->getMessage(), $exceptions->getFile(), $exceptions->getLine());
+        dd(dirname(__DIR__),$exceptions);
     })->create();

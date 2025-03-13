@@ -35,7 +35,6 @@ type Auth = {
 const MemberMaster: React.FC<{ auth: Auth }> = ({ auth }) => {
 
     const [members, setMembers] = useState<Member[]>([]);
-    const apiUrl = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         axios.get('/api/member')

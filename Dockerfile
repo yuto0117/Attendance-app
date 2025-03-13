@@ -27,7 +27,7 @@ RUN composer install --no-dev --optimize-autoloader
 
 RUN php artisan config:cache && php artisan route:cache
 
-RUN env
+
 # 5. Node.jsとNPMのインストール
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 RUN apt-get -y install nodejs
@@ -42,7 +42,6 @@ RUN chown -R www-data:www-data storage bootstrap/cache
 
 # 7. Laravelのマイグレーション
 RUN php artisan migrate --force
-RUN ls -la /var/www/html
 
 # 8. Apache の設定
 RUN a2enmod rewrite

@@ -68,7 +68,7 @@ const DailyReportByDate: React.FC<{ attendanceMembers: Member[], employees: User
     const [members, setMembers] = useState<Member[]>(attendanceMembers);
     const [Date, setDate] = useState<string>(date);
     const [GeneralReports, setGeneralReports] = useState<GeneralReports[]>(generalReports);
-    const apiUrl = process.env.REACT_APP_API_URL
+    
 
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedDate = e.target.value;
@@ -78,7 +78,7 @@ const DailyReportByDate: React.FC<{ attendanceMembers: Member[], employees: User
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post<ApiResponse>(`${apiUrl}/api/daily-reports-by-date`,
+            const response = await axios.post<ApiResponse>('/api/daily-reports-by-date',
                 {
                     date: Date,
                     authEmployeeId: authEmployeeId,

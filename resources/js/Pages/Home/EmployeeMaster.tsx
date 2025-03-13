@@ -36,10 +36,10 @@ type Auth = {
 const EmployeeMaster: React.FC<{ auth: Auth }> = ({ auth }) => {
 
     const [employees, setEmployees] = useState<Employee[]>([]);
-    const apiUrl = process.env.REACT_APP_API_URL;
-console.log(apiUrl);
+  
+
     useEffect(() => {
-        axios.get(`${apiUrl}/api/employees`)
+        axios.get('/api/employees')
             .then(response => {
                 setEmployees(response.data);
             })

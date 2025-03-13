@@ -38,7 +38,7 @@ const MemberMaster: React.FC<{ auth: Auth }> = ({ auth }) => {
     const apiUrl = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        axios.get(`${apiUrl}/api/member`)
+        axios.get('/api/member')
             .then(response => {
                 setMembers(response.data);
             })

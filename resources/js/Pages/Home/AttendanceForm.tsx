@@ -30,7 +30,7 @@ const AttendanceForm: React.FC<{ attendanceMembers: Member[] }> = ({ attendanceM
     const [members, setMembers] = useState<Member[]>(attendanceMembers);
     const [Date, setDate] = useState<string>(members[0].attendances[0].date);
     const apiUrl = process.env.REACT_APP_API_URL
-
+console.log(apiUrl);
     const updateAttendanceStatus = async (memberId: string, date: string, newStatus: string) => {
         try {
 

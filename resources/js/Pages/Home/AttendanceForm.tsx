@@ -29,12 +29,12 @@ const AttendanceForm: React.FC<{ attendanceMembers: Member[] }> = ({ attendanceM
 
     const [members, setMembers] = useState<Member[]>(attendanceMembers);
     const [Date, setDate] = useState<string>(members[0].attendances[0].date);
-
+    const apiUrl = process.env.REACT_APP_API_URL
 
     const updateAttendanceStatus = async (memberId: string, date: string, newStatus: string) => {
         try {
 
-            const response = await axios.post('http://127.0.0.1:8000/api/update-attendance', {
+            const response = await axios.post(`${apiUrl}/api/update-attendance`, {
                 member_id: memberId,
                 date: date,
                 attendance_status: newStatus,
@@ -49,7 +49,7 @@ const AttendanceForm: React.FC<{ attendanceMembers: Member[] }> = ({ attendanceM
 
     const fetchAttendance = async (selectedDate: string) => {
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/date-attendance', {
+            const response = await axios.post(`${apiUrl}/api/date-attendance`, {
                 date: selectedDate,
             });
             setMembers(response.data);

@@ -63,7 +63,7 @@ const DailyReportRecord: React.FC<{ attendanceMembers: Member[], employees: User
     const [startDate, setStartDate] = useState<string>(startdate);
     const [endDate, setEndDate] = useState<string>(enddate);
     const [memberId, setMemberId] = useState<number>();
-
+    const apiUrl = process.env.REACT_APP_API_URL;
     console.log(members);
     const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedDate = e.target.value;
@@ -83,7 +83,7 @@ const DailyReportRecord: React.FC<{ attendanceMembers: Member[], employees: User
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/daily-reports-record', {
+            const response = await axios.post(`${apiUrl}/api/daily-reports-record`, {
                 startDate: startDate,
                 endDate: endDate,
                 memberId: memberId,

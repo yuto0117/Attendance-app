@@ -35,10 +35,10 @@ type Auth = {
 const MemberMaster: React.FC<{ auth: Auth }> = ({ auth }) => {
 
     const [members, setMembers] = useState<Member[]>([]);
-
+    const apiUrl = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/api/member')
+        axios.get(`${apiUrl}/api/member`)
             .then(response => {
                 setMembers(response.data);
             })

@@ -73,7 +73,7 @@ const ReportForm: React.FC<{ attendanceMembers: Member[], employees: User[] , ge
     const [genelalContent, setgenelalContent] = useState<string>(generalReport.general_report_content);
     const [handoverContent, sethandoverContent] = useState<string>(generalReport.handover_content);
     const [newData, setNewData] = useState<ApiResponse | null>(null);
-
+    const apiUrl = process.env.REACT_APP_API_URL;
     
 
     const getEmployeeNameById = (employeeId: number) => {
@@ -122,7 +122,7 @@ const ReportForm: React.FC<{ attendanceMembers: Member[], employees: User[] , ge
         e.preventDefault();
         const payload = members.flat();
         try {
-            const response = await axios.post('http://127.0.0.1:8000/api/update-reports', {
+            const response = await axios.post(`${apiUrl}/api/update-reports`, {
                 reports: payload,
                 employeeId: EmployeeId,
                 generalReport: generalReport,
@@ -141,7 +141,7 @@ const ReportForm: React.FC<{ attendanceMembers: Member[], employees: User[] , ge
     const handleNewDataSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post<ApiResponse>('http://127.0.0.1:8000/api/employee-reports', {
+            const response = await axios.post<ApiResponse>(`${apiUrl}/api/employee-reports`, {
                 date: Date,
                 employeeId: EmployeeId,
             });

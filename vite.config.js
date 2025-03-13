@@ -10,4 +10,7 @@ export default defineConfig({
         }),
         react(),
     ],
+    server: {
+        https: true // これを追加（正しい位置）
+    }
 });

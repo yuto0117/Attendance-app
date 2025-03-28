@@ -27,22 +27,7 @@ class DailyReportController extends Controller
         $date = Carbon::now()->toDateString(); 
 
 
-        // $generalReport = GeneralReport::where('employee_id', Auth::user()->employee_id)
-        //                                      ->where('general_report_date', $date)
-        //                                      ->first();
-                            
-        // if (!$generalReport) {
-        // GeneralReport::create([
-        //     'handover_content' => '',
-        //     'general_report_content' => '',
-        //     'general_report_date' => $date,
-        //     'employee_id' => Auth::user()->employee_id,
-        // ]);
-        // }
-
-        // $generalReport = GeneralReport::where('employee_id', Auth::user()->employee_id)
-        // ->where('general_report_date', $date)
-        // ->first();
+       
 
         $generalReport = GeneralReport::firstOrCreate(
             [

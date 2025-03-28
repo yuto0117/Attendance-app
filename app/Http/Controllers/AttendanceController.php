@@ -35,7 +35,7 @@ class AttendanceController extends Controller
             }
         }
 
-    //    $attendanceMembers = Member::with('attendances')->get();
+    
        $attendanceMembers = Member::with(['attendances' => function($query) use ($date) {
        $query->where('date', $date);
        }])->get();

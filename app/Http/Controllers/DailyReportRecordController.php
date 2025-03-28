@@ -45,7 +45,7 @@ public function showDailyReportsRecord(Request $request)
     $memberId = $request->input('memberId');
     $employees = User::all();
 
-    $attendanceMembers = Member::where('member_id', $memberId) // メンバーIDが1の条件
+    $attendanceMembers = Member::where('member_id', $memberId) 
         ->with([
             'attendances' => function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('date', [$startDate, $endDate])

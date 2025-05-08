@@ -1,5 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
+import { Errors } from '@inertiajs/core';
 
 
 type Data = {
@@ -16,6 +17,7 @@ type Data = {
 const EditEmployeeDetails: React.FC<{ memberdata: Data }> = ({ memberdata }) => {
 
     const [formData, setFormData] = useState<Data>(memberdata);
+    const [errors, setErrors] = useState<Errors>({});
 
 
     useEffect(() => {
@@ -56,10 +58,12 @@ const EditEmployeeDetails: React.FC<{ memberdata: Data }> = ({ memberdata }) => 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        router.visit('/member-update-confirmation', {
-            method: 'post',
-            data: formData,
-        })
+        router.post('/member-update-confirmation', formData, {
+            onError: (err) => {
+                setErrors(err);
+            },
+        });
+
     };
 
     const cancelRegistration = (): void => {
@@ -100,6 +104,9 @@ const EditEmployeeDetails: React.FC<{ memberdata: Data }> = ({ memberdata }) => 
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.member_id && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.member_id}</p>
+                                )}
                             </td>
                             <td className="px-6 py-4 ">
                                 <input
@@ -109,6 +116,9 @@ const EditEmployeeDetails: React.FC<{ memberdata: Data }> = ({ memberdata }) => 
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.name && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                                )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <input
@@ -118,6 +128,9 @@ const EditEmployeeDetails: React.FC<{ memberdata: Data }> = ({ memberdata }) => 
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                 {errors.phonetic_reading && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.phonetic_reading}</p>
+                                )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <select
@@ -132,6 +145,9 @@ const EditEmployeeDetails: React.FC<{ memberdata: Data }> = ({ memberdata }) => 
                                     <option value='女性'>女性</option>
                                     <option value='不明'>不明</option>
                                 </select>
+                                {errors.gender && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.gender}</p>
+                                )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <input
@@ -141,6 +157,9 @@ const EditEmployeeDetails: React.FC<{ memberdata: Data }> = ({ memberdata }) => 
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.birthday && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.birthday}</p>
+                                )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <input
@@ -150,6 +169,9 @@ const EditEmployeeDetails: React.FC<{ memberdata: Data }> = ({ memberdata }) => 
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.start_date && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.start_date}</p>
+                                )}
                             </td>
 
                             <td className="px-6 py-4 whitespace-nowrap">
@@ -160,6 +182,9 @@ const EditEmployeeDetails: React.FC<{ memberdata: Data }> = ({ memberdata }) => 
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.end_date && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.end_date}</p>
+                                )}
                             </td>
                         </tr>
 

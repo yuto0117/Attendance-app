@@ -149,7 +149,6 @@ export default function EmployeeRegister() {
                                     value={data.end_date}
                                     className="mt-1 block w-full"
                                     onChange={(e) => setData('end_date', e.target.value)}
-                                    required
                                 />
                                 <InputError message={errors.end_date} className="mt-2" />
                             </td>

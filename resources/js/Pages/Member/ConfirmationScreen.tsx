@@ -51,9 +51,6 @@ const RegistrationConfirmation: React.FC<{ memberdata: Data, url: string, btn: s
     router.visit(url, {
       method: 'post',
       data: data,
-      onError: (errors) => {
-        alert('社員idが重複している可能性があります');
-      },
     })
   }
 

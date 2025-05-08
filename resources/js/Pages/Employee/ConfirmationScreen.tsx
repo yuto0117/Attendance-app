@@ -18,8 +18,7 @@ type Data = {
 const RegistrationConfirmation: React.FC<{ employeedata: Data, url: string, btn: string, heading: string }> = ({ employeedata, url, btn, heading }) => {
 
   const [data, setData] = useState<Data | undefined>(employeedata);
-
-  console.log(url);
+  
   useEffect(() => {
     if (employeedata) {
       localStorage.setItem('employeedata', JSON.stringify(employeedata));

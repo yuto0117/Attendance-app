@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Member;
 use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\MemberStoreRequest;
+use App\Http\Requests\MemberUpdateRequest;
 
 
 class MemberController extends Controller
@@ -22,11 +24,8 @@ class MemberController extends Controller
     public function store(Request $request): RedirectResponse
     {
        
-        $request->validate([
-            'member_id' => 'required|numeric|unique:members,member_id',
-        ]);
-
-        $user = Member::create([
+        
+        Member::create([
             'name' => $request->name,
             'phonetic_reading'=> $request->phonetic_reading,
             'member_id' => $request->member_id,
@@ -41,12 +40,10 @@ class MemberController extends Controller
     }
 
 
-    public function confirmation(Request $request)
+    public function confirmation(MemberStoreRequest $request)
     {
        
-
-        $data = $request->all();
-
+        $data = $request->validated();
 
         return Inertia::render('Member/ConfirmationScreen', [
             'memberdata' => $data,
@@ -57,11 +54,10 @@ class MemberController extends Controller
 
     }
 
-    public function updateconfirmation(Request $request)
+    public function updateconfirmation(MemberUpdateRequest $request)
     {
        
-
-        $data = $request->all();
+        $data = $request->validated();
 
         return Inertia::render('Member/ConfirmationScreen', [
             'memberdata' => $data,

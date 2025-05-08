@@ -1,5 +1,7 @@
 import { Head, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
+import { Errors } from '@inertiajs/core';
+import InputError from '@/Components/InputError';
 
 
 type Data = {
@@ -17,6 +19,7 @@ type Data = {
 const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata }) => {
 
     const [formData, setFormData] = useState<Data>(employeedata);
+    const [errors, setErrors] = useState<Errors>({});
 
 
 
@@ -58,10 +61,11 @@ const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata })
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        router.visit('/employee-update-confirmation', {
-            method: 'post',
-            data: formData,
-        })
+        router.post('/employee-update-confirmation', formData, {
+            onError: (err) => {
+                setErrors(err);
+            },
+        });
     };
 
     const cancelRegistration = (): void => {
@@ -69,6 +73,7 @@ const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata })
             method: 'get',
         })
     }
+
 
     return (
 
@@ -107,7 +112,11 @@ const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata })
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.employee_id && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.employee_id}</p>
+                                )}
                             </td>
+
                             <td className="px-6 py-4 ">
                                 <input
                                     type="text"
@@ -116,7 +125,11 @@ const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata })
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.name && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                                )}
                             </td>
+
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <input
                                     type="text"
@@ -125,6 +138,9 @@ const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata })
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.phonetic_reading && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.phonetic_reading}</p>
+                                )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <input
@@ -134,6 +150,9 @@ const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata })
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.email && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                                )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <input
@@ -143,6 +162,9 @@ const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata })
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.type && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.type}</p>
+                                )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <select
@@ -156,6 +178,9 @@ const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata })
                                     <option value='1'>有効</option>
                                     <option value='0'>無効</option>
                                 </select>
+                                {errors.status && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.status}</p>
+                                )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <input
@@ -165,6 +190,9 @@ const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata })
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.password && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                                )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <input
@@ -174,18 +202,15 @@ const EditEmployeeDetails: React.FC<{ employeedata: Data }> = ({ employeedata })
                                     onChange={handleChange}
                                     className="mt-1 block w-full"
                                 />
+                                {errors.password_confirmation && (
+                                    <p className="text-red-500 text-sm mt-1">{errors.password_confirmation}</p>
+                                )}
                             </td>
                         </tr>
 
                     </tbody>
                 </table>
 
-
-                {/* <button type="submit"
-                    className="bg-gray-100 border border-gray-400 text-center py-2 rounded hover:bg-gray-200">
-                    入力完了
-                </button> 
-                <div onClick={cancelRegistration} className="bg-gray-100 border border-gray-400 text-center py-2 rounded hover:bg-gray-200">取り消し</div> */}
                 <div className="flex justify-center gap-4">
                     <button
                         type="submit"

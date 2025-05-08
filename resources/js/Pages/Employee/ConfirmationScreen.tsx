@@ -19,7 +19,7 @@ const RegistrationConfirmation: React.FC<{ employeedata: Data, url: string, btn:
 
   const [data, setData] = useState<Data | undefined>(employeedata);
 
-  console.log(data);
+  console.log(url);
   useEffect(() => {
     if (employeedata) {
       localStorage.setItem('employeedata', JSON.stringify(employeedata));
@@ -51,9 +51,6 @@ const RegistrationConfirmation: React.FC<{ employeedata: Data, url: string, btn:
     router.visit(url, {
       method: 'post',
       data: data,
-      onError: (errors) => {
-        alert('メンバーidが重複している可能性があります');
-      },
     })
   }
 

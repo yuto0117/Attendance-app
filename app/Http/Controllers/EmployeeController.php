@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use App\Http\Requests\EmployeeStoreRequest;
+use App\Http\Requests\EmployeeUpdateRequest;
 
 
 class EmployeeController extends Controller
@@ -15,12 +17,8 @@ class EmployeeController extends Controller
     //
     public function store(Request $request): RedirectResponse
     {
-       
-        $request->validate([
-            'employee_id' => 'required|integer|unique:users,employee_id',
-        ]);
-
-        $user = User::create([
+        
+        User::create([
             'name' => $request->name,
             'phonetic_reading'=> $request->phonetic_reading,
             'employee_id' => $request->employee_id,
@@ -30,16 +28,14 @@ class EmployeeController extends Controller
             'status'=> $request->status,
         ]);
 
-
         return redirect(route('EmployeeMaster', absolute: false));
     }
 
-    public function confirmation(Request $request)
+    public function confirmation(EmployeeStoreRequest $request)
     {
        
-
-        $data = $request->all();
-
+        $data = $request->validated();
+        
         return Inertia::render('Employee/ConfirmationScreen', [
             'employeedata' => $data,
             'url' => '/employee-register',
@@ -49,11 +45,11 @@ class EmployeeController extends Controller
 
     }
 
-    public function updateconfirmation(Request $request)
+    public function updateconfirmation(EmployeeUpdateRequest $request)
     {
        
 
-        $data = $request->all();
+        $data = $request->validated();
 
         return Inertia::render('Employee/ConfirmationScreen', [
             'employeedata' => $data,

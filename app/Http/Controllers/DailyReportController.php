@@ -12,6 +12,7 @@ use App\Models\GeneralReport;
 use Inertia\Inertia;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DailyReportController extends Controller
 {
@@ -20,111 +21,99 @@ class DailyReportController extends Controller
      */
     public function index()
     {
-        
-        
-        $members = Member::all();
-        $employees = User::all();
-        $date = Carbon::now()->toDateString(); 
+        $date = Carbon::now()->toDateString();
+        $employeeId = Auth::user()->employee_id;
 
+        DB::transaction(function () use ($date, $employeeId) {
+            $members = Member::all();
 
-       
+            $generalReport = GeneralReport::firstOrCreate(
+                [
+                    'employee_id' => $employeeId,
+                    'general_report_date' => $date,
+                ],
+                [
+                    'handover_content' => '',
+                    'general_report_content' => '',
+                ]
+            );
 
-        $generalReport = GeneralReport::firstOrCreate(
-            [
-                'employee_id' => Auth::user()->employee_id,
-                'general_report_date' => $date,
-            ],
-            [
-                'handover_content' => '',
-                'general_report_content' => '',
-            ]
-        );
-
-        foreach ($members as $member) {
-            $existingAttendance = Attendance::where('member_id', $member->member_id)
-                                             ->where('date', $date)
-                                             ->first();
-
-            if (!$existingAttendance) {
-                Attendance::create([
+            foreach ($members as $member) {
+                Attendance::firstOrCreate([
                     'member_id' => $member->member_id,
                     'date' => $date,
+                ], [
                     'attendance_status' => '未設定',
                 ]);
             }
-        }
 
-        foreach ($members as $member) {
-            $existingReport = DailyReport::where('member_id', $member->member_id)
-                                             ->where('report_date', $date)
-                                             ->where('employee_id', Auth::user()->employee_id)
-                                             ->first();
-
-            if (!$existingReport) {
-                DailyReport::create([
+            foreach ($members as $member) {
+                DailyReport::firstOrCreate([
                     'member_id' => $member->member_id,
-                    'employee_id' =>Auth::user()->employee_id ,
+                    'employee_id' => $employeeId,
                     'report_date' => $date,
-                    'report' =>"" ,
+                ], [
+                    'report' => '',
                 ]);
             }
-        }
-        
+        });
 
-
-       $attendanceMembers = Member::with([
-        'attendances' => function ($query) use ($date) {
-            $query->where('date', $date);  
-        },
-        'dailyReports' => function ($query) use ($date) {
-            $query->where('report_date', $date)
-            ->where('employee_id', Auth::user()->employee_id);;  
-        }
+        $attendanceMembers = Member::with([
+            'attendances' => function ($query) use ($date) {
+                $query->where('date', $date);
+            },
+            'dailyReports' => function ($query) use ($date, $employeeId) {
+                $query->where('report_date', $date)
+                    ->where('employee_id', $employeeId);
+            }
         ])->get();
+
+        $employees = User::all();
+        $generalReport = GeneralReport::where('employee_id', $employeeId)
+            ->where('general_report_date', $date)
+            ->first();
 
         return Inertia::render('Home/ReportForm', [
             'attendanceMembers' => $attendanceMembers,
             'employees' => $employees,
             'generalReport' => $generalReport,
         ]);
-    
     }
 
     public function updateReports(Request $request)
     {
+        $date = Carbon::now()->toDateString();
 
-        $data = $request->input('reports'); 
-        $employeeId = $request->input('employeeId');
-        $generalReport = $request->input('generalReport');
-        $genelalContent = $request->input('genelalContent');
-        $handoverContent = $request->input('handoverContent');  
-        $generalReportDate = $request->input('date'); 
+        DB::transaction(function () use ($request) {
+            $data = $request->input('reports');
+            $employeeId = $request->input('employeeId');
+            $genelalContent = $request->input('genelalContent');
+            $handoverContent = $request->input('handoverContent');
+            $generalReportDate = $request->input('date');
 
-        GeneralReport::where('general_report_date', $generalReportDate)
-                       ->where('employee_id',$employeeId)
-                       ->update([
-                        'handover_content' => $handoverContent,
-                        'general_report_content' => $genelalContent,
-                    ]);                  
-    
-        foreach ($data as $reportData) {
-            DailyReport::where('id', $reportData['daily_reports'][0]['id'])
-                ->where('report_date', $reportData['daily_reports'][0]['report_date'])
-                ->update(['report' => $reportData['daily_reports'][0]['report']]);
-    
-        }
-        
-        $date = Carbon::now()->toDateString(); 
+            GeneralReport::where('general_report_date', $generalReportDate)
+                ->where('employee_id', $employeeId)
+                ->update([
+                    'handover_content' => $handoverContent,
+                    'general_report_content' => $genelalContent,
+                ]);
+
+            foreach ($data as $reportData) {
+                DailyReport::where('id', $reportData['daily_reports'][0]['id'])
+                    ->where('report_date', $reportData['daily_reports'][0]['report_date'])
+                    ->update(['report' => $reportData['daily_reports'][0]['report']]);
+            }
+        });
 
         $attendanceMembers = Member::with([
             'attendances' => function ($query) use ($date) {
-                $query->where('date', $date);  
+                $query->where('date', $date);
             },
             'dailyReports' => function ($query) use ($date) {
-                $query->where('report_date', $date);  
+                $query->where('report_date', $date);
             }
-            ])->get();
-    
+        ])->get();
+
         return response()->json($attendanceMembers);
     }
 
@@ -134,74 +123,68 @@ class DailyReportController extends Controller
         $date = $request->input('date');
         $employeeId = $request->input('employeeId');
         $employee = User::where('employee_id', $employeeId)->first();
-
-       
-
-        $generalReport = GeneralReport::firstOrCreate(
-            [
-                'employee_id' =>  $employeeId,
-                'general_report_date' => $date,
-            ],
-            [
-                'handover_content' => '',
-                'general_report_content' => '',
-            ]
-        );
-
-
-        if ($employee) {
-            foreach ($members as $member) {
-                $existingAttendance = Attendance::where('member_id', $member->member_id)
-                                                 ->where('date', $date)
-                                                 ->first();
     
-                if (!$existingAttendance) {
-                    Attendance::create([
+        if (!$employee) {
+            return response()->json([
+                'error' => 'Employee not found with the provided employee_id.'
+            ], 404);
+        }
+    
+        try {
+            $generalReport = DB::transaction(function () use ($date, $employeeId, $members) {
+                $generalReport = GeneralReport::firstOrCreate(
+                    [
+                        'employee_id' => $employeeId,
+                        'general_report_date' => $date,
+                    ],
+                    [
+                        'handover_content' => '',
+                        'general_report_content' => '',
+                    ]
+                );
+    
+                foreach ($members as $member) {
+                    Attendance::firstOrCreate([
                         'member_id' => $member->member_id,
                         'date' => $date,
+                    ], [
                         'attendance_status' => '未設定',
                     ]);
                 }
-            }
     
-            foreach ($members as $member) {
-                $existingReport = DailyReport::where('member_id', $member->member_id)
-                                                 ->where('report_date', $date)
-                                                 ->where('employee_id', $employeeId)
-                                                 ->first();
-    
-                if (!$existingReport) {
-                    DailyReport::create([
+                foreach ($members as $member) {
+                    DailyReport::firstOrCreate([
                         'member_id' => $member->member_id,
-                        'employee_id' =>$employeeId ,
+                        'employee_id' => $employeeId,
                         'report_date' => $date,
-                        'report' =>"" ,
+                    ], [
+                        'report' => "",
                     ]);
                 }
-            }
-            
     
+                return $generalReport;
+            });
     
-           $attendanceMembers = Member::with([
-            'attendances' => function ($query) use ($date) {
-                $query->where('date', $date);  
-            },
-            'dailyReports' => function ($query) use ($date,$employeeId) {
-                $query->where('report_date', $date)
-                ->where('employee_id', $employeeId);
-            }
+            $attendanceMembers = Member::with([
+                'attendances' => function ($query) use ($date) {
+                    $query->where('date', $date);
+                },
+                'dailyReports' => function ($query) use ($date, $employeeId) {
+                    $query->where('report_date', $date)
+                        ->where('employee_id', $employeeId);
+                }
             ])->get();
     
             return response()->json([
                 'attendanceMembers' => $attendanceMembers,
                 'generalReport' => $generalReport
             ]);
-        }else {
+    
+        } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Employee not found with the provided employee_id.'
-            ], 404);
+                'error' => 'データの保存中にエラーが発生しました。',
+                'message' => $e->getMessage()
+            ], 500);
         }
-        
-        
     }
 }

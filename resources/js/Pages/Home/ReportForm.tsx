@@ -187,7 +187,6 @@ const ReportForm: React.FC<{ attendanceMembers: Member[], employees: User[] , ge
                 </form>
             </div>
             <div className="my-8">
-                {/* <h1 className="text-center">一覧表示</h1> */}
 
                 <form onSubmit={handleSubmit}>
                     <div>

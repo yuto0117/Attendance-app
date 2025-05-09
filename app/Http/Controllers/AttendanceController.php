@@ -48,24 +48,20 @@ class AttendanceController extends Controller
     public function updateAttendanceStatus(Request $request)
     {
         
-        $validated = $request->validate([
-            'member_id' => 'required|string',
-            'date' => 'required|date',
-            'attendance_status' => 'required|string',
-        ]);
+        $member_id = $request->input('member_id');
+        $date = $request->input('date');
+        $attendance_status = $request->input('attendance_status');
 
-        // 出席情報を更新
-        $attendance = Attendance::where('member_id', $validated['member_id'])
-                                ->where('date', $validated['date'])
+        $attendance = Attendance::where('member_id', $member_id)
+                                ->where('date', $date)
                                 ->first();
 
         
 
         if ($attendance) {
-            $attendance->attendance_status = $validated['attendance_status'];
+            $attendance->attendance_status = $attendance_status;
             $attendance->save();
 
-            $date = $validated['date'];
 
             $attendanceMembers = Member::with(['attendances' => function($query) use ($date) {
                 $query->where('date', $date); 
@@ -81,9 +77,7 @@ class AttendanceController extends Controller
         
         $members = Member::all();
 
-        $date = $request->date; 
-
-
+        $date = $request->input('date'); 
 
         foreach ($members as $member) {
             $existingAttendance = Attendance::where('member_id', $member->member_id)

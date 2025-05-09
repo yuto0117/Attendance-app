@@ -13,52 +13,52 @@ class DailyReportRecordController extends Controller
 {
     //
     public function index()
-{
-    $startDate = Carbon::now()->subMonth()->format('Y-m-d');
-    $endDate = Carbon::now()->format('Y-m-d');
-    $employees = User::all();
+    {
+        $startDate = Carbon::now()->subMonth()->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
+        $employees = User::all();
 
-    $attendanceMembers = Member::where('member_id', 1) 
-        ->with([
-            'attendances' => function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('date', [$startDate, $endDate])
-                ->orderBy('date', 'desc');  
-            },
-            'dailyReports' => function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('report_date', [$startDate, $endDate])
-                ->orderBy('report_date', 'desc');
-            }
-        ])
-        ->get();
+        $attendanceMembers = Member::where('member_id', 1)
+            ->with([
+                'attendances' => function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('date', [$startDate, $endDate])
+                        ->orderBy('date', 'desc');
+                },
+                'dailyReports' => function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('report_date', [$startDate, $endDate])
+                        ->orderBy('report_date', 'desc');
+                }
+            ])
+            ->get();
 
-    return Inertia::render('Home/DailyReportRecord', [
-        'attendanceMembers' => $attendanceMembers,
-        'employees' => $employees,
-        'startdate' => $startDate,
-        'enddate' => $endDate,
-    ]);
-}
-public function showDailyReportsRecord(Request $request)
-{
-    $startDate = $request->input('startDate');
-    $endDate = $request->input('endDate');
-    $memberId = $request->input('memberId');
-    $employees = User::all();
+        return Inertia::render('Home/DailyReportRecord', [
+            'attendanceMembers' => $attendanceMembers,
+            'employees' => $employees,
+            'startdate' => $startDate,
+            'enddate' => $endDate,
+        ]);
+    }
+    public function showDailyReportsRecord(Request $request)
+    {
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+        $memberId = $request->input('memberId');
+        $employees = User::all();
 
-    $attendanceMembers = Member::where('member_id', $memberId) 
-        ->with([
-            'attendances' => function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('date', [$startDate, $endDate])
-                ->orderBy('date', 'desc');  
-            },
-            'dailyReports' => function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('report_date', [$startDate, $endDate])
-                ->orderBy('report_date', 'desc');
-            }
-        ])
-        ->get();
+        $attendanceMembers = Member::where('member_id', $memberId)
+            ->with([
+                'attendances' => function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('date', [$startDate, $endDate])
+                        ->orderBy('date', 'desc');
+                },
+                'dailyReports' => function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('report_date', [$startDate, $endDate])
+                        ->orderBy('report_date', 'desc');
+                }
+            ])
+            ->get();
 
 
-    return response()->json($attendanceMembers);
-}
+        return response()->json($attendanceMembers);
+    }
 }
